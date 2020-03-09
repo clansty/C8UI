@@ -469,7 +469,7 @@ table.wh5-l-white-table td[data-v-b8230f20]:nth-child(3n+3) {
 }
 
 .wh5-nc-aqi[data-v-779f0e29] {
-    display: block;
+    display: none;
     background-color: hsla(0, 0%, 100%, .12);
     font-size: 1.4rem;
     font-weight: lighter;
