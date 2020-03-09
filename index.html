@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/index.css" />
+    <style>
+        td {
+            font-size: x-large;
+            font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
+            color: rgb(74, 74, 74);
+        }
+
+        .yahei {
+            font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
+        }
+
+        .gaokao {
+            font-size: x-large;
+        }
+
+        .gaokao span {
+            font-size: xx-large;
+            color: red;
+        }
+
+        .hitokoto {
+            font-size: larger;
+            color: dimgray;
+        }
+
+        div#app {
+            color: rgb(74, 74, 74);
+        }
+
+        .biaoyu {
+            color: red;
+            font-size: 70px;
+        }
+
+        .biaoyuer {
+            font-size: 70px;
+        }
+
+        div#homework .title {
+            font-size: large;
+        }
+
+        div#homework pre {
+            font-size: x-large;
+        }
+    </style>
+</head>
+
+<body background="pic/blank.jpg" onselectstart="return   false;">
+    <div id="app">
+        <el-row>
+            <el-col :span="8">
+                <el-row>
+                    <el-col :span="23" align="right">
+                        <h2>{{month}} {{date}}</h2>
+                        <p class="gaokao">距离高考 <span>{{gkcd}}</span> 天</p>
+                        <div class="right-align">
+                            <iframe src="weather.html?bg=3&md=034&lc=CN101190401&key=0b23abc522ab4c15804ace26ef307466"
+                                frameborder="0" scrolling="no" width="400" height="790"></iframe>
+                        </div>
+
+                    </el-col>
+                </el-row>
+            </el-col>>
+            <el-col :span="8">
+                <!-- 图片 -->
+                <!--img class="responsive-img" src="pic/bg.jpg"-->
+                <img src="pic/111.jpg" class="responsive-img">
+            </el-col>>
+            <el-col :span="8">
+                <!-- 一言 课表 通知 -->
+                <p id="hitokoto" class="yahei hitokoto">载入一言</p>
+                <div class="col s8">
+                    <div id="homework">
+                        <h3 class="right-align gray yahei">室内温度 <span id="tpt">{{wd}}</span>°C 湿度 <span
+                                id="sd">{{sd}}</span>%</h3>
+                        <div class="title">语文</div>
+                        <pre>{{C}}</pre>
+                        <p class="title">数学</p>
+                        <pre>{{M}}</pre>
+                        <p class="title">英语</p>
+                        <pre>{{E}}</pre>
+                        <p class="title">物理</p>
+                        <pre>{{P}}</pre>
+                        <p class="title">生物</p>
+                        <pre>{{B}}</pre>
+                    </div>
+                </div>
+                <div class="col s4">
+                    <div id="schedule">
+                    </div>
+                </div>
+                <p><a class="waves-effect waves-light btn" onclick="location.reload()">刷新页面</a></p>
+            </el-col>
+        </el-row>
+    </div>
+</body>
+
+<script type="text/javascript" src="assets/vue.js"></script>
+<script type="text/javascript" src="assets/element.js"></script>
+<script>
+    String.prototype.format = function (args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "object") {
+                for (var key in args) {
+                    if (args[key] != undefined) {
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
+                        var reg = new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    function updateDate() {
+        var date = new Date();
+        switch (date.getMonth()) {
+            case 0:
+                vdata.month = "Jan."
+                break;
+            case 1:
+                vdata.month = "Feb."
+                break;
+            case 2:
+                vdata.month = "Mar."
+                break;
+            case 3:
+                vdata.month = "Apr."
+                break;
+            case 4:
+                vdata.month = "May."
+                break;
+            case 5:
+                vdata.month = "Jun."
+                break;
+            case 6:
+                vdata.month = "Jul."
+                break;
+            case 7:
+                vdata.month = "Aug."
+                break;
+            case 8:
+                vdata.month = "Sept."
+                break;
+            case 9:
+                vdata.month = "Oct."
+                break;
+            case 10:
+                vdata.month = "Nov."
+                break;
+            case 11:
+                vdata.month = "Dec."
+                break;
+        }
+        vdata.date = date.getDate();
+    }
+    function gaokaoCd() {
+        var date = new Date();
+        var gaokaoDate = Date.parse("2020-6-7");
+        var dateSpan = gaokaoDate - date;
+        vdata.gkcd = Math.floor(dateSpan / (60 * 60 * 24 * 1000));
+    }
+    function hitokoto() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "https://api.imjad.cn/hitokoto/", true);
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("hitokoto").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.send();
+    }
+    function updateSchedule() {
+        var date = new Date();
+        var kb = '<table class="centered"><tbody><tr><td>{0}</td></tr><tr><td>{1}</td></tr><tr><td>{2}</td></tr><tr><td>{3}</td></tr><tr><td>{4}</td></tr><tr><td>{5}</td></tr><tr><td>{6}</td></tr><tr><td>{7}</td></tr><tr><td>{8}</td></tr><tr><td>{9}</td></tr></tbody></table>';
+        switch (date.getDay()) {
+            case 1:
+                kb = kb.format("语文", "语文", "语文", "数学", "数学", "英语", "物理", "生物", "自习", "班会");
+                break;
+            case 2:
+                kb = kb.format("数学", "数学", "数学", "英语", "英语", "生物", "语文", "语文", "物理", "数学");
+                break;
+            case 3:
+                kb = kb.format("英语", "英语", "英语", "语文", "语文", "数学", "数学", "体育", "精神食粮", "精神食粮");
+                break;
+            case 4:
+                kb = kb.format("语文", "语文", "语文", "数学", "数学", "自习", "英语", "英语", "生物", "物理");
+                break;
+            case 5:
+                kb = kb.format("英语", "英语", "英语", "数学", "物理", "语文", "数学", "数学", "生物", "体育");
+                break;
+            case 6:
+                kb = kb.format("语文", "语文", "英语", "英语", "数学", "数学", "数学", "", "", "");
+                break;
+        }
+        document.getElementById("schedule").innerHTML = kb;
+    }
+    function updateHomework() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "http://127.0.0.1:8308/api/homework", true);
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var obj = JSON.parse(xmlhttp.responseText);
+                hw.C = obj.C;
+                hw.M = obj['M'];
+                hw.E = obj['E'];
+                hw.P = obj['P'];
+                hw.B = obj['B'];
+            }
+        }
+        xmlhttp.send();
+        var xmlhttp2 = new XMLHttpRequest();
+        xmlhttp2.open("GET", "http://127.0.0.1:8308/api/tmp", true);
+        xmlhttp2.onreadystatechange = function () {
+            if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+                var obj = JSON.parse(xmlhttp2.responseText);
+                hw.wd = obj.wd;
+                hw.sd = obj.sd;
+            }
+        }
+        xmlhttp2.send();
+
+    }
+    var hw = {
+        C: "",
+        M: "",
+        E: "",
+        P: "",
+        B: "",
+        wd: "--",
+        sd: "--"
+    }
+    var vdata={
+        hw:{
+            c:"",
+            m:"",
+            e:"",
+            p:"",
+            b:"",
+        },
+        month:"",
+        date:"",
+        gkcd:""
+    };
+    new Vue({
+        el: '#app',
+        data: vdata
+    })
+    updateDate();
+    setInterval("updateDate()", 1000 * 60 * 60);
+    gaokaoCd();
+    setInterval("gaokaoCd()", 1000);
+    hitokoto();
+    setInterval("hitokoto()", 30000);
+    updateSchedule();
+    setInterval("updateSchedule()", 1000 * 60 * 60);
+    updateHomework();
+    setInterval("updateHomework()", 1000 * 15);
+
+</script>
+
+</html>

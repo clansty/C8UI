@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>高三八班作业看板</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://lib.baomitu.com/element-ui/2.12.0/theme-chalk/index.css">
+    <style>
+        .item {
+            margin-bottom: 18px;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            display: table;
+            content: "";
+        }
+
+        .clearfix:after {
+            clear: both
+        }
+
+        .box-card {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .floatbtns {
+            right: 50px;
+            bottom: 30px;
+            position: absolute;
+        }
+
+        .editbtn {
+            bottom: 50px;
+        }
+
+        .el-drawer__body {
+            padding: 20px;
+            overflow: auto;
+        }
+
+        pre {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-loading="loading">
+        <el-row type="flex" justify="center" :gutter="15">
+            <el-col :xs="22" :span="9">
+                <el-card class="box-card" shadow="hover">
+                    <div slot="header" class="clearfix" v-bind:style="{fontSize: hw.size+10 + 'px'}">
+                        <span>语文</span>
+                    </div>
+                    <div class="item" v-bind:style="{fontSize: hw.size + 'px'}">
+                        <pre>{{hw.c}}</pre>
+                    </div>
+                </el-card>
+                <el-card class="box-card" shadow="hover">
+                    <div slot="header" class="clearfix" v-bind:style="{fontSize: hw.size+10 + 'px'}">
+                        <span>数学</span>
+                    </div>
+                    <div class="item" v-bind:style="{fontSize: hw.size + 'px'}">
+                        <pre>{{hw.m}}</pre>
+                    </div>
+                </el-card>
+                <el-card class="box-card" shadow="hover">
+                    <div slot="header" class="clearfix" v-bind:style="{fontSize: hw.size+10 + 'px'}">
+                        <span>班务</span>
+                    </div>
+                    <div class="item" v-bind:style="{fontSize: hw.size + 'px'}">
+                        <pre>{{hw.z}}</pre>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :xs="22" :span="9">
+                <el-card class="box-card" shadow="hover">
+                    <div slot="header" class="clearfix" v-bind:style="{fontSize: hw.size+10 + 'px'}">
+                        <span>英语</span>
+                    </div>
+                    <div class="item" v-bind:style="{fontSize: hw.size + 'px'}">
+                        <pre>{{hw.e}}</pre>
+                    </div>
+                </el-card>
+                <el-card class="box-card" shadow="hover">
+                    <div slot="header" class="clearfix" v-bind:style="{fontSize: hw.size+10 + 'px'}">
+                        <span>物理</span>
+                    </div>
+                    <div class="item" v-bind:style="{fontSize: hw.size + 'px'}">
+                        <pre>{{hw.p}}</pre>
+                    </div>
+                </el-card>
+                <el-card class="box-card" shadow="hover">
+                    <div slot="header" class="clearfix" v-bind:style="{fontSize: hw.size+10 + 'px'}">
+                        <span>生物</span>
+                    </div>
+                    <div class="item" v-bind:style="{fontSize: hw.size + 'px'}">
+                        <pre>{{hw.b}}</pre>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-drawer title="编辑作业" :visible.sync="drawer" direction="btt" :before-close="handleClose" size="70%">
+            <p>语文作业</p>
+            <el-input v-model="hw.c" placeholder="语文作业" type="textarea" autosize></el-input>
+            <p>数学作业</p>
+            <el-input v-model="hw.m" placeholder="数学作业" type="textarea" autosize></el-input>
+            <p>英语作业</p>
+            <el-input v-model="hw.e" placeholder="英语作业" type="textarea" autosize></el-input>
+            <p>物理作业</p>
+            <el-input v-model="hw.p" placeholder="物理作业" type="textarea" autosize></el-input>
+            <p>生物作业</p>
+            <el-input v-model="hw.b" placeholder="生物作业" type="textarea" autosize></el-input>
+            <p>班务</p>
+            <el-input v-model="hw.z" placeholder="班务" type="textarea" autosize></el-input>
+        </el-drawer>
+        <div class="floatbtns">
+            <p>
+                <el-button type="warning" icon="el-icon-printer" circle @click=""></el-button>
+            </p>
+            <p>
+                <el-button type="success" icon="el-icon-full-screen" circle @click="full"></el-button>
+            </p>
+            <p>
+                <el-button type="info" icon="el-icon-plus" circle @click="large"></el-button>
+            </p>
+            <p>
+                <el-button type="info" icon="el-icon-minus" circle @click="small"></el-button>
+            </p>
+            <p>
+                <el-button type="primary" icon="el-icon-edit" circle @click="edit"></el-button>
+            </p>
+
+        </div>
+    </div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://npm.elemecdn.com/vue@2.6.11/dist/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://lib.baomitu.com/element-ui/2.12.0/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    var full = false;
+    var vdata = {
+        loading: true,
+        hw: {
+            c: "",
+            m: "",
+            e: "",
+            p: "",
+            b: "",
+            z: "",
+            size: 30
+        },
+        drawer: false,
+    }
+    var v = new Vue({
+        el: '#app',
+        data: vdata,
+        methods: {
+            edit: function () {
+                vdata.drawer = true;
+            },
+            handleClose: function (done) {
+                save();
+                done();
+            },
+            large: function () {
+                vdata.hw.size++;
+                save();
+            },
+            small: function () {
+                vdata.hw.size--;
+                save();
+            },
+            full: function () {
+                if (full)
+                    document.webkitCancelFullScreen();
+                else
+                    document.documentElement.webkitRequestFullScreen();
+                full = !full;
+            }
+
+        }
+
+    });
+    var ax = axios.create({
+        baseURL: 'http://[::]:8308/',
+        timeout: 5000,
+    });
+    ax.get('/api/homework')
+        .then(function (response) {
+            vdata.hw = response.data;
+            vdata.loading = false;
+        })
+        .catch(function (error) {
+            v.$notify({
+                title: '错误',
+                message: error,
+                type: 'error',
+                duration: 0
+            });
+        });
+    function save() {
+        ax.post('/api/homework', vdata.hw)
+            .then(function (response) {
+                if (response.data.code == 200)
+                    v.$notify({
+                        title: '保存成功',
+                        message: "200, OK!",
+                        type: 'success'
+                    });
+                else
+                    v.$notify({
+                        title: '保存失败',
+                        message: response.data,
+                        type: 'error',
+                        duration: 0
+                    });
+
+            })
+            .catch(function (error) {
+                v.$notify({
+                    title: '保存失败',
+                    message: error,
+                    type: 'error',
+                    duration: 0
+                });
+            });
+
+    }
+</script>
+
+</html>
