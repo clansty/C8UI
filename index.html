@@ -82,16 +82,18 @@
                 <p id="hitokoto" class="yahei hitokoto">{{hitokoto}}</p>
                 <el-col :span="16">
                     <div id="homework">
-                        <div class="title">语文</div>
-                        <pre>{{C}}</pre>
+                        <p class="title">语文</p>
+                        <pre>{{hw.c}}</pre>
                         <p class="title">数学</p>
-                        <pre>{{M}}</pre>
+                        <pre>{{hw.m}}</pre>
                         <p class="title">英语</p>
-                        <pre>{{E}}</pre>
+                        <pre>{{hw.e}}</pre>
                         <p class="title">物理</p>
-                        <pre>{{P}}</pre>
+                        <pre>{{hw.p}}</pre>
                         <p class="title">生物</p>
-                        <pre>{{B}}</pre>
+                        <pre>{{hw.b}}</pre>
+                        <p class="title">班务</p>
+                        <pre>{{hw.z}}</pre>
                     </div>
                 </el-col>
                 <el-col :span="8">
@@ -106,7 +108,7 @@
                         </table>
                     </div>
                 </el-col>
-                <p><a class="waves-effect waves-light btn" onclick="location.reload()">刷新页面</a></p>
+                <el-button type="primary" round icon="el-icon-refresh" @click="reload">刷新页面</el-button>
             </el-col>
         </el-row>
     </div>
@@ -114,6 +116,7 @@
 
 <script type="text/javascript" src="assets/vue.js"></script>
 <script type="text/javascript" src="assets/element.js"></script>
+<script src="assets/axios.min.js"></script>
 <script>
     String.prototype.format = function (args) {
         var result = this;
@@ -213,6 +216,18 @@
         }
     }
     function updateHomework() {
+        ax.get('/api/homework')
+            .then(function (response) {
+                vdata.hw = response.data;
+                vdata.loading = false;
+            })
+            .catch(function (error) {
+                v.$notify({
+                    title: '作业刷新失败',
+                    message: error,
+                    type: 'error',
+                });
+            });
 
     }
     var vdata = {
@@ -221,7 +236,8 @@
             m: "",
             e: "",
             p: "",
-            b: ""
+            b: "",
+            z: ""
         },
         month: "",
         date: "",
@@ -229,9 +245,19 @@
         hitokoto: "",
         schedule: ["无课表"]
     };
+    var ax = axios.create({
+        baseURL: 'http://[::]:8308/',
+        timeout: 5000,
+    });
+
     new Vue({
         el: '#app',
-        data: vdata
+        data: vdata,
+        methods: {
+            reload: function () {
+                location.reload();
+            }
+        }
     })
     updateDate();
     setInterval("updateDate()", 1000 * 60 * 60);
