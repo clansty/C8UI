@@ -122,9 +122,12 @@
             <p>班务</p>
             <el-input v-model="hw.z" placeholder="班务" type="textarea" autosize></el-input>
         </el-drawer>
+        <el-drawer title="打印" :visible.sync="drawerPrint" direction="rtl">
+            <el-input v-model="printContent" placeholder="打印内容" type="textarea" autosize></el-input>
+        </el-drawer>
         <div class="floatbtns">
             <p>
-                <el-button type="warning" icon="el-icon-printer" circle @click=""></el-button>
+                <el-button type="warning" icon="el-icon-printer" circle @click="printdlg"></el-button>
             </p>
             <p>
                 <el-button type="success" icon="el-icon-full-screen" circle @click="full"></el-button>
@@ -160,6 +163,8 @@
             size: 30
         },
         drawer: false,
+        printContent: "",
+        drawerPrint: false,
     }
     var v = new Vue({
         el: '#app',
@@ -186,8 +191,66 @@
                 else
                     document.documentElement.webkitRequestFullScreen();
                 full = !full;
+            },
+            printdlg: function () {
+                vdata.drawerPrint = true;
+                vdata.printContent = "";
+                if (vdata.hw.c) {
+                    vdata.printContent += "语文：";
+                    var tmp = vdata.hw.c;
+                    tmp = tmp.replace('\r', '');
+                    tmp = tmp.split('\n');
+                    tmp.forEach(i => {
+                        vdata.printContent += '\n  ' + i;
+                    });
+                }
+                if (vdata.hw.m) {
+                    vdata.printContent += "\n数学：";
+                    var tmp = vdata.hw.m;
+                    tmp = tmp.replace('\r', '');
+                    tmp = tmp.split('\n');
+                    tmp.forEach(i => {
+                        vdata.printContent += '\n  ' + i;
+                    });
+                }
+                if (vdata.hw.e) {
+                    vdata.printContent += "\n英语：";
+                    var tmp = vdata.hw.e;
+                    tmp = tmp.replace('\r', '');
+                    tmp = tmp.split('\n');
+                    tmp.forEach(i => {
+                        vdata.printContent += '\n  ' + i;
+                    });
+                }
+                if (vdata.hw.p) {
+                    vdata.printContent += "\n物理：";
+                    var tmp = vdata.hw.p;
+                    tmp = tmp.replace('\r', '');
+                    tmp = tmp.split('\n');
+                    tmp.forEach(i => {
+                        vdata.printContent += '\n  ' + i;
+                    });
+                }
+                if (vdata.hw.b) {
+                    vdata.printContent += "\n生物：";
+                    var tmp = vdata.hw.b;
+                    tmp = tmp.replace('\r', '');
+                    tmp = tmp.split('\n');
+                    tmp.forEach(i => {
+                        vdata.printContent += '\n  ' + i;
+                    });
+                }
+                if (vdata.hw.z) {
+                    vdata.printContent += "\n班务：";
+                    var tmp = vdata.hw.z;
+                    tmp = tmp.replace('\r', '');
+                    tmp = tmp.split('\n');
+                    tmp.forEach(i => {
+                        vdata.printContent += '\n  ' + i;
+                    });
+                }
+                vdata.printContent = vdata.printContent.trim('\n');
             }
-
         }
 
     });
