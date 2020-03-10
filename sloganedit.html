@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>高三八班标语编辑器</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="assets/index.css" />
+    <style>
+        div#app {
+            color: rgb(74, 74, 74);
+        }
+
+        #slogan pre {
+            color: red;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        #slogan p {
+            margin-top: 30px;
+        }
+
+        pre {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-loading="loading">
+        <el-row type="flex" justify="center" :gutter="15">
+            <el-col :span="8">
+                <p>标语内容</p>
+                <el-input v-model="slogan.content" placeholder="标语内容" type="textarea" autosize></el-input>
+                <p>字体大小</p>
+                <el-input-number v-model="slogan.size" :step="5"></el-input-number>
+                <p>作者</p>
+                <el-input v-model="slogan.speaker" placeholder="请输入内容"></el-input>
+                <p>字体大小</p>
+                <el-input-number v-model="slogan.speakerSize" :step="5"></el-input-number>
+            </el-col>
+            <el-col :span="8" align="center" id="slogan">
+                <pre v-bind:style="{fontSize: slogan.size + 'px'}">{{slogan.content}}</pre>
+                <p align="right" v-bind:style="{fontSize: slogan.speakerSize + 'px'}">——{{slogan.speaker}}</p>
+            </el-col>
+            <el-col :span="8">
+                <p>
+                    <el-button type="success" icon="el-icon-check" round @click="save">保存</el-button>
+                </p>
+            </el-col>
+        </el-row>
+    </div>
+</body>
+<script type="text/javascript" src="assets/vue.js"></script>
+<script type="text/javascript" src="assets/element.js"></script>
+<script src="assets/axios.min.js"></script>
+
+<script>
+    var full = false;
+    var vdata = {
+        loading: true,
+        slogan: {
+            content: "",
+            size: 0,
+            speaker: "",
+            speakerSize: 0
+        }
+
+    }
+    var v = new Vue({
+        el: '#app',
+        data: vdata,
+        methods: {
+            save: function () {
+                ax.post('/api/slogan', vdata.hw)
+                    .then(function (response) {
+                        if (response.data.code == 200)
+                            v.$notify({
+                                title: '保存成功',
+                                message: "200, OK!",
+                                type: 'success'
+                            });
+                        else
+                            v.$notify({
+                                title: '保存失败',
+                                message: response.data,
+                                type: 'error',
+                                duration: 0
+                            });
+
+                    })
+                    .catch(function (error) {
+                        v.$notify({
+                            title: '保存失败',
+                            message: error,
+                            type: 'error',
+                            duration: 0
+                        });
+                    });
+            }
+        }
+    });
+    var ax = axios.create({
+        baseURL: 'http://[::]:8308/',
+        timeout: 5000,
+    });
+    ax.get('/api/slogan')
+        .then(function (response) {
+            vdata.slogan = response.data;
+            vdata.loading = false;
+        })
+        .catch(function (error) {
+            v.$notify({
+                title: '错误',
+                message: error,
+                type: 'error',
+                duration: 0
+            });
+        });
+</script>
+
+</html>
