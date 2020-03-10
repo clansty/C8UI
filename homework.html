@@ -123,7 +123,16 @@
             <el-input v-model="hw.z" placeholder="班务" type="textarea" autosize></el-input>
         </el-drawer>
         <el-drawer title="打印" :visible.sync="drawerPrint" direction="rtl">
-            <el-input v-model="printContent" placeholder="打印内容" type="textarea" autosize></el-input>
+            <p>
+                <el-input v-model="printContent" placeholder="打印内容" type="textarea" autosize></el-input>
+            </p>
+            <p>
+                份数
+                <el-input-number v-model="prtcopies" :min="1" label="份数"></el-input-number>
+            </p>
+            <p>
+                <el-button type="warning" icon="el-icon-printer" round @click="print">打印</el-button>
+            </p>
         </el-drawer>
         <div class="floatbtns">
             <p>
@@ -160,11 +169,12 @@
             p: "",
             b: "",
             z: "",
-            size: 30
+            size: 30,
         },
         drawer: false,
         printContent: "",
         drawerPrint: false,
+        prtcopies: 1,
     }
     var v = new Vue({
         el: '#app',
@@ -250,13 +260,47 @@
                     });
                 }
                 vdata.printContent = vdata.printContent.trim('\n');
+            },
+            print: function () {
+                vdata.drawerPrint = false;
+                vdata.loading = true;
+                var toprt = "";
+                for (var i = 0; i < vdata.prtcopies; i++)
+                    toprt += vdata.printContent + '\n\n';
+                toprt = toprt.trim('\n');
+                ax.post('/api/memobird/printText', { content: toprt })
+                    .then(function (response) {
+                        if (response.data.status)
+                            v.$notify({
+                                title: '打印成功',
+                                message: "ヾ(*´▽‘*)ﾉ",
+                                type: 'success'
+                            });
+                        else
+                            v.$notify({
+                                title: '看起来没打成',
+                                message: '(/ﾟДﾟ)/',
+                                type: 'error',
+                                duration: 0
+                            });
+                        vdata.loading = false;
+                    })
+                    .catch(function (error) {
+                        v.$notify({
+                            title: '打印失败',
+                            message: error,
+                            type: 'error',
+                            duration: 0
+                        });
+                        vdata.loading = false;
+                    });
             }
         }
 
     });
     var ax = axios.create({
         baseURL: 'http://[::]:8308/',
-        timeout: 5000,
+        timeout: 20000,
     });
     ax.get('/api/homework')
         .then(function (response) {
