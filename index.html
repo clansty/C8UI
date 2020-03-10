@@ -6,13 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="assets/index.css" />
     <style>
-        td {
+        #schedule p {
             font-size: x-large;
-        }
-
-        tr {
-            /* margin-bottom: 30px; */
-            height: 65px;
         }
 
         .date {
@@ -40,13 +35,14 @@
             color: rgb(74, 74, 74);
         }
 
-        .biaoyu {
+        #slogan pre {
             color: red;
-            font-size: 70px;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
-        .biaoyuer {
-            font-size: 70px;
+        #slogan p {
+            margin-top: 30px;
         }
 
         div#homework .title {
@@ -62,7 +58,6 @@
             word-wrap: break-word;
             white-space: pre-wrap;
         }
-
     </style>
 </head>
 
@@ -74,7 +69,7 @@
                     <el-col :span="23" align="right">
                         <p class="date">{{month}} {{date}}</p>
                         <p class="gaokao">距离高考 <span>{{gkcd}}</span> 天</p>
-                        <div class="right-align">
+                        <div>
                             <iframe src="weather.html?bg=3&md=034&lc=CN101190401&key=0b23abc522ab4c15804ace26ef307466"
                                 frameborder="0" scrolling="no" width="400" height="790"></iframe>
                         </div>
@@ -82,8 +77,9 @@
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col :span="8">
-                <pre>这是标语</pre>
+            <el-col :span="8" align="center" id="slogan">
+                <pre v-bind:style="{fontSize: slogan.size + 'px'}">{{slogan.content}}</pre>
+                <p align="right" v-bind:style="{fontSize: slogan.speakerSize + 'px'}">——{{slogan.speaker}}</p>
             </el-col>
             <el-col :span="8">
                 <el-col :span="16">
@@ -103,15 +99,8 @@
                     </div>
                 </el-col>
                 <el-col :span="8">
-                    <div id="schedule">
-                        <table align="center">
-                            <tbody>
-                                <tr v-for="ke in schedule">
-                                    <!--avoid using JavaScript keyword as property name, 23333-->
-                                    <td>{{ke}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div id="schedule" align="center">
+                        <p v-for="ke in schedule">{{ke}}</p>
                     </div>
                 </el-col>
                 <el-button type="primary" round icon="el-icon-refresh" @click="reload">刷新页面</el-button>
@@ -226,7 +215,13 @@
         date: "",
         gkcd: "",
         hitokoto: "",
-        schedule: ["无课表"]
+        schedule: ["无课表"],
+        slogan: {
+            content: "天王盖地虎，\n全考九八五。\n宝塔镇河妖，\n至少二幺幺。",
+            size: 70,
+            speaker: "鲁迅",
+            speakerSize: 50
+        }
     };
     var ax = axios.create({
         baseURL: 'http://[::]:8308/',
