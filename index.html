@@ -56,6 +56,12 @@
         div#homework pre {
             font-size: x-large;
         }
+
+        pre {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
     </style>
 </head>
 
@@ -79,7 +85,6 @@
                 <pre>这是标语</pre>
             </el-col>
             <el-col :span="8">
-                <p id="hitokoto" class="yahei hitokoto">{{hitokoto}}</p>
                 <el-col :span="16">
                     <div id="homework">
                         <p class="title">语文</p>
@@ -250,7 +255,7 @@
         timeout: 5000,
     });
 
-    new Vue({
+    var v = new Vue({
         el: '#app',
         data: vdata,
         methods: {
