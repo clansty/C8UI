@@ -78,7 +78,7 @@
         data: vdata,
         methods: {
             save: function () {
-                ax.post('/api/slogan', vdata.hw)
+                ax.post('/api/slogan', vdata.slogan)
                     .then(function (response) {
                         if (response.data.code == 200)
                             v.$notify({
