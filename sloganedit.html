@@ -11,6 +11,10 @@
     <!-- import CSS -->
     <link rel="stylesheet" href="assets/index.css" />
     <style>
+        pre {
+            font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
+        }
+
         div#app {
             color: rgb(74, 74, 74);
         }
@@ -107,7 +111,7 @@
         }
     });
     var ax = axios.create({
-        baseURL: 'http://[::]:8308/',
+        baseURL: 'http://127.0.0.1:8308/',
         timeout: 5000,
     });
     ax.get('/api/slogan')

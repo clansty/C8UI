@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="assets/index.css" />
     <style>
+        body {
+            font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
+        }
+
+        pre {
+            font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
+        }
+
         #schedule p {
             font-size: x-large;
         }
@@ -237,7 +245,7 @@
         }
     };
     var ax = axios.create({
-        baseURL: 'http://[::]:8308/',
+        baseURL: 'http://127.0.0.1:8308/',
         timeout: 5000,
     });
 
