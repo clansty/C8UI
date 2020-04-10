@@ -93,17 +93,17 @@
             <el-col :span="8">
                 <el-col :span="16">
                     <div id="homework">
-                        <p class="title">语文</p>
+                        <p class="title" v-show="hw.c">语文</p>
                         <pre>{{hw.c}}</pre>
-                        <p class="title">数学</p>
+                        <p class="title" v-show="hw.m">数学</p>
                         <pre>{{hw.m}}</pre>
-                        <p class="title">英语</p>
+                        <p class="title" v-show="hw.e">英语</p>
                         <pre>{{hw.e}}</pre>
-                        <p class="title">物理</p>
+                        <p class="title" v-show="hw.p">物理</p>
                         <pre>{{hw.p}}</pre>
-                        <p class="title">生物</p>
+                        <p class="title" v-show="hw.b">生物</p>
                         <pre>{{hw.b}}</pre>
-                        <p class="title">班务</p>
+                        <p class="title" v-show="hw.z">班务</p>
                         <pre>{{hw.z}}</pre>
                     </div>
                 </el-col>
