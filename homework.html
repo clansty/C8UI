@@ -308,19 +308,27 @@
         //////这里是 API 地址//////
         timeout: 20000,
     });
-    ax.get('/api/homework')
-        .then(function (response) {
-            vdata.hw = response.data;
-            vdata.loading = false;
-        })
-        .catch(function (error) {
-            v.$notify({
-                title: '错误',
-                message: error,
-                type: 'error',
-                duration: 0
+    function ref() {
+        if (vdata.drawer)
+            return;
+        //编辑时不刷新
+        ax.get('/api/homework')
+            .then(function (response) {
+                vdata.hw = response.data;
+                vdata.loading = false;
+            })
+            .catch(function (error) {
+                v.$notify({
+                    title: '错误',
+                    message: error,
+                    type: 'error',
+                    duration: 0
+                });
             });
-        });
+    }
+    ref();
+    setInterval("ref()", 1000);
+
     function save() {
         ax.post('/api/homework', vdata.hw)
             .then(function (response) {
