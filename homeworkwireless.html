@@ -72,9 +72,11 @@
                 <el-input v-model="hw.b" placeholder="生物作业" type="textarea" autosize></el-input>
                 <p>班务</p>
                 <el-input v-model="hw.z" placeholder="班务" type="textarea" autosize></el-input>
+                <p>字体大小</p>
+                <el-input-number v-model="hw.size" type="textarea" :step="5"></el-input-number>
                 <p>
                     <el-button type="success" icon="el-icon-check" round @click="save">保存</el-button>
-                    <el-button type="warning" icon="el-icon-printer" round @click="printdlg">打印</el-button>
+                    <!-- <el-button type="warning" icon="el-icon-printer" round @click="printdlg">打印</el-button> -->
                 </p>
             </el-col>
         </el-row>
