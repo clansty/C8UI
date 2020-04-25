@@ -75,7 +75,7 @@
                 <p>字体大小</p>
                 <el-input-number v-model="hw.size" type="textarea" :step="5" @input="save"></el-input-number>
                 <p>
-                    <el-button type="success" icon="el-icon-check" round @click="save">保存</el-button>
+                    <!-- <el-button type="success" icon="el-icon-check" round @click="save">保存</el-button> -->
                     <el-button type="warning" icon="el-icon-printer" round @click="printdlg">打印</el-button>
                 </p>
             </el-col>
@@ -100,7 +100,6 @@
 
 <script>
     var full = false;
-    var busy = false;
     var vdata = {
         loading: true,
         hw: {
@@ -121,12 +120,8 @@
         data: vdata,
         methods: {
             save: function () {
-                if (busy)
-                    return;
-                busy = true;
                 ax.post('/api/homework', vdata.hw)
                     .then(function (response) {
-                        busy = false;
                         if (response.data.code != 200)
                             v.$notify({
                                 title: '保存失败',
@@ -137,7 +132,6 @@
 
                     })
                     .catch(function (error) {
-                        busy = false;
                         v.$notify({
                             title: '保存失败',
                             message: error,
