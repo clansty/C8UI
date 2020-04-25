@@ -332,13 +332,7 @@
     function save() {
         ax.post('/api/homework', vdata.hw)
             .then(function (response) {
-                if (response.data.code == 200)
-                    v.$notify({
-                        title: '保存成功',
-                        message: "200, OK!",
-                        type: 'success'
-                    });
-                else
+                if (response.data.code != 200)
                     v.$notify({
                         title: '保存失败',
                         message: response.data,

@@ -61,22 +61,22 @@
         <el-row type="flex" justify="center" :gutter="15">
             <el-col :xs="22" :span="9">
                 <p>语文作业</p>
-                <el-input v-model="hw.c" placeholder="语文作业" type="textarea" autosize></el-input>
+                <el-input v-model="hw.c" placeholder="语文作业" type="textarea" autosize @input="save"></el-input>
                 <p>数学作业</p>
-                <el-input v-model="hw.m" placeholder="数学作业" type="textarea" autosize></el-input>
+                <el-input v-model="hw.m" placeholder="数学作业" type="textarea" autosize @input="save"></el-input>
                 <p>英语作业</p>
-                <el-input v-model="hw.e" placeholder="英语作业" type="textarea" autosize></el-input>
+                <el-input v-model="hw.e" placeholder="英语作业" type="textarea" autosize @input="save"></el-input>
                 <p>物理作业</p>
-                <el-input v-model="hw.p" placeholder="物理作业" type="textarea" autosize></el-input>
+                <el-input v-model="hw.p" placeholder="物理作业" type="textarea" autosize @input="save"></el-input>
                 <p>生物作业</p>
-                <el-input v-model="hw.b" placeholder="生物作业" type="textarea" autosize></el-input>
+                <el-input v-model="hw.b" placeholder="生物作业" type="textarea" autosize @input="save"></el-input>
                 <p>班务</p>
-                <el-input v-model="hw.z" placeholder="班务" type="textarea" autosize></el-input>
+                <el-input v-model="hw.z" placeholder="班务" type="textarea" autosize @input="save"></el-input>
                 <p>字体大小</p>
-                <el-input-number v-model="hw.size" type="textarea" :step="5"></el-input-number>
+                <el-input-number v-model="hw.size" type="textarea" :step="5" @input="save"></el-input-number>
                 <p>
                     <el-button type="success" icon="el-icon-check" round @click="save">保存</el-button>
-                    <!-- <el-button type="warning" icon="el-icon-printer" round @click="printdlg">打印</el-button> -->
+                    <el-button type="warning" icon="el-icon-printer" round @click="printdlg">打印</el-button>
                 </p>
             </el-col>
         </el-row>
@@ -84,13 +84,13 @@
             <p>
                 <el-input v-model="printContent" placeholder="打印内容" type="textarea" autosize></el-input>
             </p>
-            <p>
+            <!-- <p>
                 份数
                 <el-input-number v-model="prtcopies" :min="1" label="份数"></el-input-number>
             </p>
             <p>
                 <el-button type="warning" icon="el-icon-printer" round @click="print">打印</el-button>
-            </p>
+            </p> -->
         </el-drawer>
     </div>
 </body>
@@ -100,6 +100,7 @@
 
 <script>
     var full = false;
+    var busy = false;
     var vdata = {
         loading: true,
         hw: {
@@ -120,29 +121,28 @@
         data: vdata,
         methods: {
             save: function () {
+                if (busy)
+                    return;
+                busy = true;
                 ax.post('/api/homework', vdata.hw)
                     .then(function (response) {
-                        if (response.data.code == 200)
-                            v.$notify({
-                                title: '保存成功',
-                                message: "200, OK!",
-                                type: 'success'
-                            });
-                        else
+                        busy = false;
+                        if (response.data.code != 200)
                             v.$notify({
                                 title: '保存失败',
                                 message: response.data,
                                 type: 'error',
-                                duration: 0
+                                duration: 5
                             });
 
                     })
                     .catch(function (error) {
+                        busy = false;
                         v.$notify({
                             title: '保存失败',
                             message: error,
                             type: 'error',
-                            duration: 0
+                            duration: 5
                         });
                     });
 
