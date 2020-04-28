@@ -9,7 +9,7 @@
 
 ### 高考倒计时
 高考时间在 169 行定义
-```html
+```js
 var gaokaoDate = Date.parse("2020-7-7");
 ```
 
