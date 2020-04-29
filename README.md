@@ -28,7 +28,7 @@ var gaokaoDate = Date.parse("2020-7-7");
 标语与作业读取自 C8API
 
 ## 作业看板 homework.html
-![](pic/homework.png)
+![](pic/homework.jpg)
 
 作业看板方便大屏显示所有作业，每秒自动刷新一次
 
