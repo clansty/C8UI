@@ -3,7 +3,7 @@
 
 后端运行 [C8API](https://github.com/clansty/c8api)，用于标语和作业的存取
 ## 运行效果
-![]()
+![](pic/6819830748384592397.jpg)
 
 ## 动态壁纸 wallpaper.html
 运行效果图为动态壁纸界面，我们通过 Live2DViewerEx 加载动态壁纸。可以使用任何支持使用网页做壁纸的动态壁纸软件
