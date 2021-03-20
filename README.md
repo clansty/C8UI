@@ -4,14 +4,15 @@
 后端运行 [C8API](https://github.com/clansty/c8api)，用于标语和作业的存取
 ## 运行效果
 ![](pic/6819830748384592397.jpg)
+![](pic/6976F0086364F9E711F930227581F653.jpg)
 
 ## 动态壁纸 wallpaper.html
-运行效果图为动态壁纸界面，我们通过 Live2DViewerEx 加载动态壁纸。可以使用任何支持使用网页做壁纸的动态壁纸软件
+运行效果图为动态壁纸界面，我们通过 Live2DViewerEx / 开源项目Wallpaper3 加载动态壁纸。可以使用任何支持使用网页做壁纸的动态壁纸软件
 
 ### 高考倒计时
 高考时间在 169 行定义
 ```js
-var gaokaoDate = Date.parse("2020-7-7");
+var gaokaoDate = Date.parse("2021-6-7");
 ```
 
 ### 天气
@@ -21,11 +22,8 @@ var gaokaoDate = Date.parse("2020-7-7");
 
 通过 citycode 定义苏州的天气，位于 82 行
 
-### 课表
-课表暂时写在 JS 里，位于 79 行附近
-
 ### API集成
-标语与作业读取自 C8API
+标语、作业和课表读取自 C8API
 
 ## 作业看板 homework.html
 ![](pic/homework.jpg)
