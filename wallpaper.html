@@ -40,11 +40,11 @@
         }
 
         div#app {
-            color: rgb(74, 74, 74);
+            // color: rgb(74, 74, 74);
         }
 
         #slogan pre {
-            color: red;
+            color: white;
             margin-top: 30px;
             margin-bottom: 30px;
         }
@@ -59,6 +59,7 @@
         }
 
         div#homework pre {
+			font-color: white;
             font-size: x-large;
             margin-left: 2em;
         }
@@ -70,7 +71,9 @@
     </style>
 </head>
 
-<body background="pic/blank.jpg" onselectstart="return   false;">
+<!-- <body background="pic/6593288232e14bd1b458f6cf52c97db2.jpeg" style="background-size: cover; " onselectstart="return   false;" style="overflow: hidden;"> -->
+<body background="pic/OHR.CorfeDorset_ZH-CN8002715956_UHD.jpg" onselectstart="return   false;" style="overflow: hidden;">
+	<!-- img src="pic/OHR.CorfeDorset_ZH-CN8002715956_UHD.jpg" style="width:100%;height:100%;border-width:0px;border:none;"></img-->
     <div id="app">
         <el-row>
             <el-col :span="8">
@@ -80,7 +83,7 @@
                         <p class="gaokao">距离高考 <span>{{gkcd}}</span> 天</p>
                         <div>
                             <iframe src="weather.html?bg=3&md=034&lc=CN101190401&key=0b23abc522ab4c15804ace26ef307466"
-                                frameborder="0" scrolling="no" width="400" height="790"></iframe>
+                                frameborder="0" scrolling="no" width="400" height="790" allowtransparency="true" style="background: transparent;"></iframe>
                         </div>
 
                     </el-col>
@@ -99,11 +102,11 @@
                         <pre>{{hw.m}}</pre>
                         <p class="title" v-show="hw.e">英语</p>
                         <pre>{{hw.e}}</pre>
-                        <p class="title" v-show="hw.p">物理</p>
+                        <p class="title" v-show="hw.p">地理</p>
                         <pre>{{hw.p}}</pre>
                         <p class="title" v-show="hw.b">生物</p>
                         <pre>{{hw.b}}</pre>
-                        <p class="title" v-show="hw.z">班务</p>
+                        <p class="title" v-show="hw.z">历史</p>
                         <pre>{{hw.z}}</pre>
                     </div>
                 </el-col>
@@ -111,6 +114,13 @@
                     <div id="schedule" align="center">
                         <p v-for="ke in schedule">{{ke}}</p>
                     </div>
+					<hr color="black"/>
+					<div id="tb" align="center">
+						<p> 昨日值日：</p>
+						<p v-show="ptb"> {{ptb}} </p>
+						<p> 值日：</p>
+						<p v-show="tb"> {{tb}} </p>
+					</div>
                 </el-col>
                 <!-- <el-button type="primary" round icon="el-icon-refresh" @click="reload">刷新页面</el-button> -->
             </el-col>
@@ -166,7 +176,7 @@
     }
     function gaokaoCd() {
         var date = new Date();
-        var gaokaoDate = Date.parse("2020-7-7");
+        var gaokaoDate = Date.parse("2021-6-7");
         var dateSpan = gaokaoDate - date;
         vdata.gkcd = Math.floor(dateSpan / (60 * 60 * 24 * 1000));
     }
@@ -174,27 +184,52 @@
 
     }
     function updateSchedule() {
-        var date = new Date();
+        /* var date = new Date();
         switch (date.getDay()) {
             case 1:
-                vdata.schedule = ["语文", "语文", "语文", "数学", "数学", "英语", "物理", "生物", "自习", "班会"];
+                vdata.schedule = ["历史早读", "历史", "英语", "英语", "数学", "语文午自习", "地理", "语文", "生物", "自修","自修"];
                 break;
             case 2:
-                vdata.schedule = ["数学", "数学", "数学", "英语", "英语", "生物", "数学", "语文", "语文", "语文"];
+                vdata.schedule = ["英语早读", "英语", "语文", "数学", "历史", "数学午休", "数学", "数学", "体育", "地理","自修"];
                 break;
             case 3:
-                vdata.schedule = ["英语", "英语", "数学", "语文", "物理", "语文", "体育", "精神食粮", "精神食粮", "精神食粮"];
+                vdata.schedule = ["数学早读", "数学", "数学", "语文", "英语", "英语午休", "历史", "地理", "生物", "自修", "自修"];
                 break;
             case 4:
-                vdata.schedule = ["语文", "语文", "英语", "数学", "数学", "物理", "生物", "英语", "英语", "英语"];
+                vdata.schedule = ["语文早读", "语文", "语文", "地理", "历史", "历史午休", "生物", "数学", "英语", "体育","自修"];
                 break;
             case 5:
-                vdata.schedule = ["英语", "英语", "英语", "语文", "语文", "数学", "数学", "体育", "物理", "生物"];
+                vdata.schedule = ["地理早读", "地理", "数学", "英语", "语文", "生物午休", "生物", "历史", "班会", "自修","自修"];
                 break;
             case 6:
-                vdata.schedule = ["语文", "语文", "英语", "英语", "数学", "数学", "数学"];
+                vdata.schedule = ["生物早读", "生物", "历史", "地理", "语文", "数学午自习", "英语","数学","自修","自修"];
                 break;
-        }
+        }*/
+		ax.get('/api/schedule')
+            .then(function (response) {
+                vdata.schedule = response.data.SCH;
+            })
+            .catch(function (error) {
+                v.$notify({
+                    title: 'Update Schedule Error',
+                    message: error,
+                    type: 'error',
+                });
+            });
+    }
+	function updateTb() {
+        ax.get('/api/tb')
+            .then(function (response) {
+                vdata.tb = response.data.S;
+				vdata.ptb = response.data.pS;
+            })
+            .catch(function (error) {
+                v.$notify({
+                    title: 'Update Tb Error',
+                    message: error,
+                    type: 'error',
+                });
+            });
     }
     function updateHomework() {
         ax.get('/api/homework')
@@ -237,6 +272,8 @@
         gkcd: "",
         hitokoto: "",
         schedule: ["无课表"],
+		tb: '',
+		ptb: '',
         slogan: {
             content: "",
             size: 0,
@@ -245,7 +282,7 @@
         }
     };
     var ax = axios.create({
-        baseURL: 'http://192.168.31.2:8308/',
+        baseURL: 'http://127.0.0.1:8308/',
         timeout: 5000,
     });
 
@@ -266,10 +303,13 @@
     // setInterval("hitokoto()", 30000);
     updateSchedule();
     setInterval("updateSchedule()", 1000 * 60 * 60);
+	updateTb();
+	setInterval("updateTb()", 1000 * 60 * 60);
     updateHomework();
     setInterval("updateHomework()", 1000);
     updateSlogan();
     setInterval("updateSlogan()", 1000 * 5);
+	
 </script>
 
 </html>
