@@ -2,6 +2,11 @@
 这是我们班的智能系统界面代码，包含动态壁纸，作业编辑器和标语编辑器，使用 vue 编写。可以通过简单的适配在任何教室使用
 
 后端运行 [C8API](https://github.com/clansty/c8api)，用于标语和作业的存取
+
+## Discontinued
+
+感谢大家对 C8UI 的支持。作者已经不再维护本项目，欢迎大家使用更加强大并且活跃更新的 [rain15z3/ClassTools](https://github.com/rain15z3/ClassTools) 代替 C8UI
+
 ## 运行效果
 ![](pic/6819830748384592397.jpg)
 
